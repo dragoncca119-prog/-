@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>창식의 경조노트 · 부조금 장부</title>
+<style>
+  :root {
+    /* 다채로운 메인 컬러 팔레트 (보라, 초록, 노랑/주황, 파랑) */
+    --purple: #8b5cf6;
+    --purple-dark: #6d28d9;
+    --purple-light: #f3e8ff;
+    --purple-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+
+    --green: #10b981;
+    --green-dark: #059669;
+    --green-light: #ecfdf5;
+    --green-gradient: linear-gradient(135deg, #059669 0%, #34d399 100%);
+
+    --yellow: #f59e0b;
+    --yellow-dark: #d97706;
+    --yellow-light: #fef3c7;
+    --yellow-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+
+    --coral: #f43f5e;
+    --coral-light: #ffe4e6;
+
+    --blue: #3b82f6;
+    --blue-light: #eff6ff;
+
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --muted: #64748b;
+    --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+    --shadow: 0 10px 25px -5px rgba(0,0,0,0.07), 0 8px 10px -6px rgba(0,0,0,0.05);
+    --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.08);
+    --radius: 18px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Pretendard', 'Malgun Gothic', '맑은 고딕', Apple SD Gothic Neo, sans-serif;
+    background: #fdfbf7;
+    background-image: 
+      radial-gradient(#ede9fe 1.5px, transparent 1.5px), 
+      radial-gradient(#d1fae5 1.5px, #fdfbf7 1.5px);
+    background-size: 48px 48px;
+    background-position: 0 0, 24px 24px;
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 16px;
+  }
+
+  /* ── 헤더 (보라 + 초록 + 노랑 그라데이션) ── */
+  header {
+    background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 38%, #059669 76%, #d97706 100%);
+    color: #fff;
+    padding: 26px 32px 24px;
+    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    right: -40px;
+    top: -40px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(254, 240, 138, 0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  header h1 {
+    font-size: 2.1rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  header p {
+    font-size: 1.05rem;
+    color: #fef08a;
+    font-weight: 500;
+    margin-top: 6px;
+  }
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ── 화면 최상단 누적 요약 배너 (프리미엄 하이라이트 디자인) ── */
+  .top-summary-container {
+    max-width: 1200px;
+    margin: 22px auto 10px;
+    padding: 0 16px;
+  }
+  .top-summary-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .top-summary-header-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #1e1b4b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .top-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 18px;
+  }
+  .top-sum-card {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 24px 28px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+    border: 3px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.25s ease;
+  }
+  .top-sum-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+  }
+  .top-sum-card::after {
+    content: '';
+    position: absolute;
+    right: -25px;
+    bottom: -25px;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    opacity: 0.14;
+    pointer-events: none;
+  }
+  /* 1. 올해 낸 총 부조금 (황금빛 오렌지/노랑) */
+  .top-sum-card.card-expense {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #fffbeb 0%, #ffffff 85%);
+  }
+  .top-sum-card.card-expense::after { background: #f59e0b; }
+
+  /* 2. 총 받은 축의금 (싱그러운 에메랄드 초록) */
+  .top-sum-card.card-income {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 85%);
+  }
+  .top-sum-card.card-income::after { background: #10b981; }
+
+  /* 3. 누적 순수지 (고급 바이올렛 보라) */
+  .top-sum-card.card-balance {
+    border-color: #8b5cf6;
+    background: linear-gradient(135deg, #f5f3ff 0%, #ffffff 85%);
+  }
+  .top-sum-card.card-balance::after { background: #8b5cf6; }
+
+  .top-sum-left .top-sum-label {
+    font-size: 1.05rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .card-expense .top-sum-label { color: #b45309; }
+  .card-income .top-sum-label { color: #047857; }
+  .card-balance .top-sum-label { color: #6d28d9; }
+
+  .top-sum-amount {
+    font-size: 2.3rem;
+    font-weight: 900;
+    letter-spacing: -0.8px;
+    line-height: 1.1;
+  }
+  .card-expense .top-sum-amount { color: #d97706; }
+  .card-income .top-sum-amount { color: #059669; }
+  .card-balance .top-sum-amount { color: #7c3aed; }
+
+  .top-sum-sub {
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-weight: 700;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .top-sum-icon-badge {
+    width: 66px;
+    height: 66px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.3rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .card-expense .top-sum-icon-badge { background: #fef3c7; }
+  .card-income .top-sum-icon-badge { background: #d1fae5; }
+  .card-balance .top-sum-icon-badge { background: #ede9fe; }
+
+  /* ── 송금/전달 방식 선택 인터페이스 ── */
+  .method-picker-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e1b4b;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+  }
+  .method-picker-btn:hover {
+    border-color: var(--purple);
+    background: #faf5ff;
+  }
+  .method-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .mb-봉투 { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+  .mb-이체 { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+  .mb-화환 { background: #fce7f3; color: #be185d; border: 1px solid #fbcfe8; }
+  .mb-모바일송금 { background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; }
+  .mb-선물 { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+
+  /* ── 전달 방식 선택 팝업 모달 그리드 ── */
+  .method-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+  }
+  .method-opt-card {
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 16px 14px;
+    text-align: center;
+    cursor: pointer;
+    background: #ffffff;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .method-opt-card:hover {
+    border-color: var(--purple);
+    background: #f5f3ff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(139, 92, 246, 0.15);
+  }
+  .method-opt-card.selected {
+    border-color: var(--purple-dark);
+    background: #ede9fe;
+    box-shadow: 0 0 0 2px var(--purple);
+  }
+  .method-opt-card .m-icon {
+    font-size: 2.2rem;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .method-opt-card .m-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #1e1b4b;
+  }
+  .method-opt-card .m-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ── 카카오톡 메시지 모달 & UI ── */
+  .kakao-modal-card {
+    background: #fae100;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
+    margin: 16px 0;
+  }
+  .kakao-bubble {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    position: relative;
+    font-size: 0.96rem;
+    line-height: 1.6;
+    color: #371d1e;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    word-break: break-all;
+    white-space: pre-wrap;
+    font-weight: 500;
+  }
+  .kakao-bubble::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: -8px;
+    width: 0; height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid #ffffff;
+  }
+  .kakao-header-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #371d1e;
+    margin-bottom: 10px;
+  }
+  .btn-kakao-copy {
+    background: #fae100;
+    color: #371d1e;
+    border: none;
+    box-shadow: 0 4px 12px rgba(250, 225, 0, 0.4);
+    font-weight: 800;
+  }
+  .btn-kakao-copy:hover {
+    background: #f5d800;
+    transform: translateY(-2px);
+  }
+  .btn-kakao-share {
+    background: #371d1e;
+    color: #fae100;
+    border: none;
+    font-weight: 800;
+  }
+  .btn-kakao-share:hover {
+    background: #241314;
+    transform: translateY(-2px);
+  }
+  .btn-sound-test {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+  }
+  .btn-sound-test:hover {
+    background: rgba(255, 255, 255, 0.45);
+    transform: translateY(-2px);
+  }
+  .dday-card-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+  .btn-kakao-sm {
+    background: #fae100;
+    color: #371d1e;
+    font-size: 0.82rem;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+  }
+  .btn-kakao-sm:hover {
+    background: #f5d800;
+    transform: translateY(-1px);
+  }
+  .btn-chime-sm {
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 0.82rem;
+    font-weight: 800;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+  }
+  .btn-chime-sm:hover {
+    background: #dbeafe;
+    transform: translateY(-1px);
+  }
+
+  /* ── 상단 액션 버튼들 ── */
+  .header-btns {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .header-btn {
+    padding: 9px 16px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-csv {
+    background: #10b981;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  }
+  .btn-csv:hover { background: #059669; transform: translateY(-2px); }
+  .btn-backup {
+    background: #f59e0b;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+  }
+  .btn-backup:hover { background: #d97706; transform: translateY(-2px); }
+  .btn-restore {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+  .btn-restore:hover { background: rgba(255, 255, 255, 0.4); transform: translateY(-2px); }
+  .btn-reset-sample {
+    background: #ec4899;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
+  }
+  .btn-reset-sample:hover { background: #db2777; transform: translateY(-2px); }
+
+  /* ── 탭 네비게이션 ── */
+  .tabs-container {
+    background: #ffffff;
+    box-shadow: var(--shadow-sm);
+    border-bottom: 2px solid #ede9fe;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .tabs {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+    gap: 8px;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    padding: 16px 20px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border: none;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    transition: all 0.25s;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tab-btn:hover {
+    color: var(--purple-dark);
+    background: #f5f3ff;
+  }
+  .tab-btn.active {
+    color: var(--purple-dark);
+    font-weight: 800;
+  }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 12px;
+    right: 12px;
+    height: 4px;
+    background: linear-gradient(90deg, #8b5cf6, #10b981, #f59e0b);
+    border-radius: 4px 4px 0 0;
+  }
+
+  .tab-panel {
+    display: none;
+    padding: 28px 20px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn 0.3s ease;
+  }
+  .tab-panel.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── 섹션 헤더 ── */
+  .section-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #1e1b4b;
+  }
+  .section-title .pill {
+    font-size: 0.85rem;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .pill-purple { background: var(--purple-light); color: var(--purple-dark); }
+  .pill-green { background: var(--green-light); color: var(--green-dark); }
+  .pill-yellow { background: var(--yellow-light); color: var(--yellow-dark); }
+
+  /* ── D-Day 카드 그리드 ── */
+  .dday-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 18px;
+    margin-bottom: 34px;
+  }
+
+  .dday-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border-top: 6px solid var(--purple);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .dday-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* D-Day 카드 상태별 색상 (노랑, 초록, 보라, 레드) */
+  .dday-card.theme-birthday {
+    border-top-color: #f59e0b;
+    background: linear-gradient(180deg, #fffbeb 0%, #ffffff 50px);
+  }
+  .dday-card.theme-memorial {
+    border-top-color: #64748b;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 50px);
+  }
+  .dday-card.theme-wedding {
+    border-top-color: #ec4899;
+    background: linear-gradient(180deg, #fdf2f8 0%, #ffffff 50px);
+  }
+  .dday-card.theme-sixty {
+    border-top-color: #10b981;
+    background: linear-gradient(180deg, #ecfdf5 0%, #ffffff 50px);
+  }
+  .dday-card.theme-other {
+    border-top-color: #8b5cf6;
+    background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 50px);
+  }
+
+  .dday-card.today {
+    border-top-color: #ef4444 !important;
+    background: linear-gradient(180deg, #fef2f2 0%, #ffffff 60px) !important;
+    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.2) !important;
+  }
+  .dday-card.today .dday-badge {
+    color: #dc2626 !important;
+    animation: pulse 1.8s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+
+  .dday-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  .dday-badge {
+    font-size: 2.3rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+  .theme-birthday .dday-badge { color: #d97706; }
+  .theme-memorial .dday-badge { color: #475569; }
+  .theme-wedding .dday-badge { color: #db2777; }
+  .theme-sixty .dday-badge { color: #059669; }
+  .theme-other .dday-badge { color: #7c3aed; }
+
+  .dday-cat-tag {
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 5px 12px;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .cat-tag-생일 { background: #fef3c7; color: #b45309; }
+  .cat-tag-기일제사 { background: #f1f5f9; color: #334155; }
+  .cat-tag-결혼 { background: #fce7f3; color: #be185d; }
+  .cat-tag-회갑칠순 { background: #d1fae5; color: #065f46; }
+  .cat-tag-기타 { background: #ede9fe; color: #6d28d9; }
+
+  .dday-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .dday-date {
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dday-memo {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+    font-size: 0.88rem;
+    color: #4b5563;
+    line-height: 1.4;
+    word-break: break-all;
+  }
+
+  .no-dday {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 42px 20px;
+    color: var(--muted);
+    background: #ffffff;
+    border: 2px dashed #cbd5e1;
+    border-radius: var(--radius);
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  /* ── 공통 카드 스타일 ── */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    margin-bottom: 26px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+  }
+  .card-header-styled {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+  .card-header-styled h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #1e1b4b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* ── 폼 컨트롤 ── */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .form-control {
+    padding: 13px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1.02rem;
+    font-family: inherit;
+    color: var(--text);
+    background: #ffffff;
+    transition: all 0.2s;
+    width: 100%;
+  }
+  .form-control:focus {
+    outline: none;
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+  }
+
+  .date-row { display: flex; gap: 8px; }
+  .date-row .form-control { flex: 1; }
+  .lunar-toggle {
+    padding: 0 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .lunar-toggle.active {
+    border-color: var(--purple);
+    color: var(--purple-dark);
+    background: var(--purple-light);
+  }
+
+  /* ── 버튼들 ── */
+  .btn {
+    padding: 13px 26px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(124, 58, 237, 0.45);
+  }
+  .btn-emerald {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  }
+  .btn-emerald:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+  }
+  .btn-amber {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+  }
+  .btn-amber:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.45);
+  }
+  .btn-secondary {
+    background: #f1f5f9;
+    color: #475569;
+  }
+  .btn-secondary:hover { background: #e2e8f0; }
+
+  .btn-sm {
+    padding: 7px 12px;
+    font-size: 0.88rem;
+    border-radius: 8px;
+    font-weight: 700;
+  }
+  .btn-danger {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+  .btn-danger:hover { background: #fecaca; }
+  .btn-edit {
+    background: #fef3c7;
+    color: #b45309;
+  }
+  .btn-edit:hover { background: #fde68a; }
+
+  .form-actions { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+
+  /* ── 테이블 ── */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    background: #fff;
+  }
+  th {
+    background: #f8fafc;
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #475569;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+  }
+  tr:hover td { background: #faf5ff; }
+  tr:last-child td { border-bottom: none; }
+
+  .cat-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 12px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .cat-생일 { background: #fef3c7; color: #b45309; }
+  .cat-기일제사 { background: #f1f5f9; color: #475569; }
+  .cat-결혼 { background: #fce7f3; color: #9d174d; }
+  .cat-회갑칠순 { background: #d1fae5; color: #065f46; }
+  .cat-기타 { background: #ede9fe; color: #6d28d9; }
+
+  .lunar-label {
+    font-size: 0.78rem;
+    background: #f3e8ff;
+    color: #7c3aed;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin-left: 6px;
+  }
+
+  /* ── 부조금 요약 카드 (보라, 초록, 노랑) ── */
+  .summary-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .summary-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+  }
+  .summary-card.income::before { background: linear-gradient(90deg, #10b981, #34d399); }
+  .summary-card.expense::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+  .summary-card.balance::before { background: linear-gradient(90deg, #8b5cf6, #c084fc); }
+
+  .summary-card .header-sub {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .summary-card .amount {
+    font-size: 1.85rem;
+    font-weight: 900;
+    margin-top: 10px;
+    letter-spacing: -0.5px;
+  }
+  .summary-card.income .amount { color: #059669; }
+  .summary-card.expense .amount { color: #d97706; }
+  .summary-card.balance .amount { color: #7c3aed; }
+
+  /* ── 캘린더 ── */
+  .cal-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .cal-nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .cal-nav-btn {
+    background: #f1f5f9;
+    border: none;
+    border-radius: 10px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: 800;
+    color: #334155;
+    transition: all 0.2s;
+  }
+  .cal-nav-btn:hover { background: #e2e8f0; color: #000; }
+  .cal-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #1e1b4b;
+    min-width: 170px;
+    text-align: center;
+  }
+  .cal-legend {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  .cal-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #10b981; }
+  .dot-pink { background: #ec4899; }
+  .dot-purple { background: #8b5cf6; }
+
+  .cal-container {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 16px;
+    border: 1px solid var(--border);
+  }
+  .cal-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 8px;
+  }
+  .cal-header span {
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--muted);
+    padding: 10px 0;
+  }
+  .cal-header span:first-child { color: #ef4444; }
+  .cal-header span:last-child { color: #3b82f6; }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .cal-day {
+    background: #ffffff;
+    border-radius: 12px;
+    min-height: 105px;
+    padding: 8px;
+    font-size: 0.95rem;
+    border: 1.5px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: all 0.15s;
+  }
+  .cal-day:hover {
+    border-color: #c4b5fd;
+    background: #faf5ff;
+  }
+  .cal-day.other-month {
+    background: #fafafa;
+    opacity: 0.45;
+    border-color: transparent;
+  }
+  .cal-day.today {
+    border-color: #8b5cf6;
+    background: #f5f3ff;
+    box-shadow: 0 0 0 2px #c4b5fd;
+  }
+  .cal-day-num {
+    font-weight: 800;
+    font-size: 1rem;
+    margin-bottom: 2px;
+  }
+  .cal-day:nth-child(7n+1) .cal-day-num { color: #ef4444; }
+  .cal-day:nth-child(7n) .cal-day-num { color: #3b82f6; }
+
+  .cal-event-pill {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+  }
+  .cal-pill-생일 { background: #fef3c7; color: #b45309; }
+  .cal-pill-기일제사 { background: #f1f5f9; color: #334155; }
+  .cal-pill-결혼 { background: #fce7f3; color: #9d174d; }
+  .cal-pill-회갑칠순 { background: #d1fae5; color: #065f46; }
+  .cal-pill-기타 { background: #ede9fe; color: #6d28d9; }
+
+  /* ── 모달 & 토스트 ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 22px;
+    padding: 32px;
+    width: 100%;
+    max-width: 540px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+  }
+  .modal h3 {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #1e1b4b;
+    margin-bottom: 20px;
+  }
+  .modal-actions { display: flex; gap: 10px; margin-top: 24px; justify-content: flex-end; }
+
+  .toast {
+    position: fixed;
+    bottom: 30px; left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: #1e1b4b;
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: 40px;
+    font-size: 1rem;
+    font-weight: 700;
+    z-index: 2000;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* 반응형 모바일 */
+  @media (max-width: 768px) {
+    header { padding: 20px 16px; }
+    header h1 { font-size: 1.6rem; }
+    .tab-btn { padding: 14px 14px; font-size: 0.95rem; }
+    .tab-panel { padding: 20px 14px 40px; }
+    .card { padding: 20px 16px; }
+    .dday-grid { grid-template-columns: 1fr; }
+    .cal-day { min-height: 75px; padding: 4px; font-size: 0.8rem; }
+    .cal-event-pill { font-size: 0.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ 헤더 (다채로운 보라·초록·노랑 테마) ══ -->
+<header>
+  <div class="header-row">
+    <div>
+      <h1>🏡 창식의 경조노트 · 부조금 장부</h1>
+      <p>✨ 우리 가족 경조사 알림부터 축의금·부조금 완벽 관리까지</p>
+    </div>
+    <div class="header-btns">
+      <button class="header-btn btn-sound-test" onclick="playChime('bell')">🔔 알림음 듣기</button>
+      <button class="header-btn btn-csv" onclick="exportCSV()">📥 엑셀(CSV) 저장</button>
+      <button class="header-btn btn-backup" onclick="backupJSON()">💾 백업</button>
+      <label class="header-btn btn-restore">
+        📂 복원
+        <input type="file" accept=".json" onchange="restoreJSON(event)" style="display:none;">
+      </label>
+      <button class="header-btn btn-reset-sample" onclick="resetToSampleData()" title="예시 데이터를 다시 불러옵니다">🔄 샘플 다시채우기</button>
+    </div>
+  </div>
+</header>
+
+<!-- ══ 최상단 올해 누적 요약 카드 (올해 낸 총 부조금 & 총 받은 축의금) ══ -->
+<div class="top-summary-container">
+  <div class="top-summary-header">
+    <div class="top-summary-header-title">
+      <span>📊 우리 가족 경조사 재정 누적 요약</span>
+      <span class="pill pill-purple">실시간 자동집계</span>
+    </div>
+    <div style="font-size:0.9rem;color:var(--muted);font-weight:700;">
+      📅 기준 연도: <strong id="topYearBadge" style="color:var(--purple-dark);">2026</strong>년
+    </div>
+  </div>
+  <div class="top-summary-grid" id="topSummaryGrid"></div>
+</div>
+
+<!-- ══ 상단 탭 ══ -->
+<div class="tabs-container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('home',this)">🏠 홈 &amp; D-Day 알림</button>
+    <button class="tab-btn" onclick="switchTab('register',this)">➕ 새 경조사 등록</button>
+    <button class="tab-btn" onclick="switchTab('list',this)">📋 경조사 전체목록</button>
+    <button class="tab-btn" onclick="switchTab('ledger',this)">💰 부조금·축의금 장부</button>
+    <button class="tab-btn" onclick="switchTab('calendar',this)">📅 가족 달력</button>
+  </div>
+</div>
+
+<!-- ══ 1. 홈 탭 (D-Day 카드 & 이번 달 일정) ══ -->
+<div id="tab-home" class="tab-panel active">
+  <div class="section-title">
+    <span>🔔 다가오는 주요 행사</span>
+    <span class="pill pill-yellow">30일 이내 D-Day</span>
+  </div>
+  <div id="ddayGrid" class="dday-grid"></div>
+
+  <div class="section-title" style="margin-top: 20px;">
+    <span>📌 이번 달 가족 경조사</span>
+    <span class="pill pill-green" id="thisMonthBadge">이번 달</span>
+  </div>
+  <div id="thisMonthGrid" class="dday-grid"></div>
+</div>
+
+<!-- ══ 2. 경조사 등록 탭 ══ -->
+<div id="tab-register" class="tab-panel">
+  <div class="card">
+    <div class="card-header-styled">
+      <h2>➕ 새로운 가족 경조사 등록하기</h2>
+      <span style="font-size:0.9rem;color:var(--muted);font-weight:600;">* 안전하게 브라우저에 자동 보관됩니다</span>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>🏷️ 행사 분류</label>
+        <select id="f_cat" class="form-control">
+          <option value="생일">🎂 생일 (가족·친척)</option>
+          <option value="회갑/칠순">🎊 회갑 / 칠순 / 팔순</option>
+          <option value="결혼">💍 결혼식 (청첩장)</option>
+          <option value="기일/제사">🕯️ 기일 / 제사 / 차례</option>
+          <option value="기타">📌 기타 (돌잔치, 개업식 등)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>👤 이름 / 행사명</label>
+        <input type="text" id="f_name" class="form-control" placeholder="예) 아버지 칠순 잔치, 삼촌 생신">
+      </div>
+      <div class="form-group">
+        <label>📅 날짜 <span id="lunarBadge" style="display:none;" class="lunar-label">음력 적용됨</span></label>
+        <div class="date-row">
+          <input type="date" id="f_date" class="form-control">
+          <button id="lunarToggleBtn" class="lunar-toggle" onclick="toggleLunar()">양력</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>🔁 반복 설정</label>
+        <select id="f_repeat" class="form-control">
+          <option value="매년">매년 반복 (생일, 제사 등)</option>
+          <option value="1회">1회성 행사 (결혼, 칠순 등)</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>📝 메모 &amp; 장소</label>
+        <textarea id="f_memo" class="form-control" rows="3" placeholder="예) 강남 르메르디앙 호텔 3층 다이아몬드홀 12시, 선물 준비하기"></textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-emerald" onclick="addEvent()">✅ 경조사 등록하기</button>
+      <button class="btn btn-secondary" onclick="clearForm()">🔄 초기화</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 3. 경조사 목록 탭 ══ -->
+<div id="tab-list" class="tab-panel">
+  <div class="card">
+    <div class="card-header-styled">
+      <h2>📋 등록된 경조사 목록</h2>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <select id="filterCat" class="form-control" style="width:auto;padding:9px 14px;" onchange="renderList()">
+          <option value="">모든 분류 보기</option>
+          <option value="생일">🎂 생일</option>
+          <option value="회갑/칠순">🎊 회갑/칠순</option>
+          <option value="결혼">💍 결혼</option>
+          <option value="기일/제사">🕯️ 기일/제사</option>
+          <option value="기타">📌 기타</option>
+        </select>
+        <input type="text" class="form-control" id="searchBox" placeholder="🔍 행사명/이름 검색..." style="width:200px;" oninput="renderList()">
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>분류</th>
+            <th>행사명 / 이름</th>
+            <th>날짜</th>
+            <th>반복</th>
+            <th>D-Day</th>
+            <th>메모 / 장소</th>
+            <th>관리</th>
+          </tr>
+        </thead>
+        <tbody id="listBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 4. 부조금 장부 탭 ══ -->
+<div id="tab-ledger" class="tab-panel">
+  <!-- 상단 수입/지출/순수지 요약 바 -->
+  <div class="summary-bar" id="summaryBar"></div>
+
+  <!-- 부조금 입력 폼 -->
+  <div class="card">
+    <div class="card-header-styled">
+      <h2>💸 부조금·축의금 내역 기록</h2>
+      <span style="font-size:0.9rem;color:var(--muted);font-weight:600;">보낸 돈과 받은 돈을 행사별로 깔끔하게 정리</span>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>🎯 연관 행사 선택</label>
+        <select id="l_event" class="form-control"></select>
+      </div>
+      <div class="form-group">
+        <label>⚖️ 입출금 종류</label>
+        <select id="l_type" class="form-control">
+          <option value="보낸">📤 내가 보낸 금액 (축의금 / 부의금 지출)</option>
+          <option value="받은">📥 내가 받은 금액 (축의금 / 부조금 수입)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>👤 상대방 이름 (보낸이/받는이)</label>
+        <input type="text" id="l_person" class="form-control" placeholder="예) 작은아버지, 홍길동 대리">
+      </div>
+      <div class="form-group">
+        <label>💵 금액 (원)</label>
+        <input type="number" id="l_amount" class="form-control" placeholder="예) 100000" min="0" step="10000">
+      </div>
+      <div class="form-group">
+        <label>🏷️ 송금·전달 방식 <span style="font-size:0.8rem;color:var(--purple);font-weight:700;">(클릭하여 분류 선택)</span></label>
+        <button type="button" class="method-picker-btn" id="methodPickerBtn" onclick="openMethodModal()">
+          <span id="selectedMethodDisplay">
+            <span class="method-badge mb-봉투">✉️ 현금 봉투</span>
+          </span>
+          <span style="font-size:0.85rem;color:var(--purple);font-weight:800;">분류 변경 ▾</span>
+        </button>
+        <input type="hidden" id="l_method" value="봉투">
+      </div>
+      <div class="form-group full">
+        <label>📝 비고 / 메모</label>
+        <input type="text" id="l_memo" class="form-control" placeholder="예) 계좌이체 완료, 화환 대신 금일봉 전달">
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="addLedger()">💾 장부에 저장하기</button>
+    </div>
+  </div>
+
+  <!-- 부조금 내역 테이블 -->
+  <div class="card">
+    <div class="card-header-styled">
+      <h2>📒 부조금 출납 내역서</h2>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <label style="font-size:0.95rem;font-weight:700;color:#475569;">행사별 모아보기:</label>
+        <select id="ledgerFilter" class="form-control" style="width:auto;padding:8px 14px;" onchange="renderLedger()">
+          <option value="">전체 내역</option>
+        </select>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>행사명</th>
+            <th>구분</th>
+            <th>대상자(이름)</th>
+            <th>전달방식</th>
+            <th>금액</th>
+            <th>비고 / 메모</th>
+            <th>기록일자</th>
+            <th>삭제</th>
+          </tr>
+        </thead>
+        <tbody id="ledgerBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 5. 캘린더 탭 ══ -->
+<div id="tab-calendar" class="tab-panel">
+  <div class="card">
+    <div class="cal-nav-bar">
+      <div class="cal-nav-controls">
+        <button class="cal-nav-btn" onclick="calMove(-1)">◀</button>
+        <span class="cal-title" id="calTitle"></span>
+        <button class="cal-nav-btn" onclick="calMove(1)">▶</button>
+        <button class="btn btn-secondary btn-sm" onclick="calToday()">오늘</button>
+      </div>
+      <div class="cal-legend">
+        <span><i class="dot dot-yellow"></i> 생일</span>
+        <span><i class="dot dot-green"></i> 칠순/회갑</span>
+        <span><i class="dot dot-pink"></i> 결혼</span>
+        <span><i class="dot dot-purple"></i> 기타</span>
+      </div>
+    </div>
+
+    <div class="cal-container">
+      <div class="cal-header">
+        <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 송금·전달 방식 선택 팝업 모달 ══ -->
+<div class="modal-overlay" id="methodModal">
+  <div class="modal" style="max-width:500px;">
+    <h3>🏷️ 송금·전달 방식 선택</h3>
+    <p style="font-size:0.95rem;color:var(--muted);margin-bottom:12px;">부조금이나 축의금을 보낸/받은 방식을 선택하세요.</p>
+    <div class="method-selection-grid">
+      <div class="method-opt-card" onclick="selectMethod('봉투')">
+        <div class="m-icon">✉️</div>
+        <div class="m-title">현금 봉투</div>
+        <div class="m-desc">직접 전달 / 식장 접수대</div>
+      </div>
+      <div class="method-opt-card" onclick="selectMethod('이체')">
+        <div class="m-icon">📱</div>
+        <div class="m-title">계좌 이체</div>
+        <div class="m-desc">은행/인터넷 뱅킹 송금</div>
+      </div>
+      <div class="method-opt-card" onclick="selectMethod('화환')">
+        <div class="m-icon">💐</div>
+        <div class="m-title">화환 / 조화</div>
+        <div class="m-desc">축하화환 / 근조화환 배송</div>
+      </div>
+      <div class="method-opt-card" onclick="selectMethod('모바일송금')">
+        <div class="m-icon">📲</div>
+        <div class="m-title">모바일 송금</div>
+        <div class="m-desc">카카오페이 / 토스 등</div>
+      </div>
+      <div class="method-opt-card" onclick="selectMethod('선물')">
+        <div class="m-icon">🎁</div>
+        <div class="m-title">선물 / 상품권</div>
+        <div class="m-desc">물품, 기프티콘, 금일봉</div>
+      </div>
+    </div>
+    <div class="modal-actions" style="margin-top:20px;">
+      <button class="btn btn-secondary" onclick="closeModal('methodModal')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 카카오톡 메시지 알림 모달 ══ -->
+<div class="modal-overlay" id="kakaoModal">
+  <div class="modal" style="max-width:520px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <h3 style="margin:0;">💬 카카오톡 알림 메시지</h3>
+      <button class="btn btn-sm btn-chime-sm" onclick="playChime('bell')">🔔 알림음 다시듣기</button>
+    </div>
+    <p style="font-size:0.9rem;color:var(--muted);margin-top:6px;">가족, 친척, 지인에게 보낼 센스있는 카톡 문구가 자동 완성되었습니다.</p>
+    
+    <div class="kakao-modal-card">
+      <div class="kakao-header-badge">
+        <span>💛 카카오톡 공유 미리보기</span>
+      </div>
+      <div class="kakao-bubble" id="kakaoMessagePreview"></div>
+    </div>
+
+    <div class="form-group" style="margin-top:12px;">
+      <label style="font-size:0.88rem;color:#475569;">✏️ 메시지 직접 수정하기</label>
+      <textarea id="kakaoMessageEdit" class="form-control" rows="4" style="font-size:0.95rem;line-height:1.5;" oninput="syncKakaoPreview()"></textarea>
+    </div>
+
+    <div class="modal-actions" style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+      <button class="btn btn-kakao-copy" onclick="copyKakaoMessage()">📋 카톡 문구 복사</button>
+      <button class="btn btn-kakao-share" onclick="shareKakao()">💬 카카오톡 전송</button>
+      <button class="btn btn-secondary" onclick="closeModal('kakaoModal')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 수정 모달 ══ -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <h3>✏️ 경조사 정보 수정</h3>
+    <div class="form-grid" id="editForm"></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEdit()">저장 완료</button>
+      <button class="btn btn-secondary" onclick="closeModal('editModal')">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 토스트 알림 ══ -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════
+//  초기 데이터 세팅 (실사용 예시 샘플 탑재)
+// ══════════════════════════════════════
+const today = new Date();
+today.setHours(0,0,0,0);
+
+// 오늘 기준으로 다가오는 날짜를 생성하는 헬퍼 (YYYY-MM-DD)
+function makeRelativeDate(offsetDays) {
+  const d = new Date(today);
+  d.setDate(d.getDate() + offsetDays);
+  const yr = d.getFullYear();
+  const mo = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${yr}-${mo}-${day}`;
+}
+
+// 기본 샘플 데이터셋 (노랑, 초록, 보라, 핑크 등 다채로운 카테고리 구성)
+function getDefaultSampleEvents() {
+  return [
+    {
+      id: 101,
+      cat: '회갑/칠순',
+      name: '아버지 칠순 잔치 🎊',
+      date: makeRelativeDate(5), // D-5
+      lunar: false,
+      repeat: '1회',
+      memo: '종로 한정식당 수연당 낮 12시 가족 식사 모임'
+    },
+    {
+      id: 102,
+      cat: '생일',
+      name: '어머니 환갑 생신 🎂',
+      date: makeRelativeDate(14), // D-14
+      lunar: true,
+      repeat: '매년',
+      memo: '음력 생신! 플라워 용돈박스 및 떡케이크 예약 완료'
+    },
+    {
+      id: 103,
+      cat: '결혼',
+      name: '사촌동생 지훈이 결혼식 💍',
+      date: makeRelativeDate(22), // D-22
+      lunar: false,
+      repeat: '1회',
+      memo: '아펠가모 선릉 2층 그랜드볼룸 오후 1시'
+    },
+    {
+      id: 104,
+      cat: '기타',
+      name: '조카 서윤이 첫돌 잔치 👶',
+      date: makeRelativeDate(28), // D-28
+      lunar: false,
+      repeat: '1회',
+      memo: '판교 뷔페 룸, 돌반지 선물 준비'
+    },
+    {
+      id: 105,
+      cat: '기일/제사',
+      name: '할아버지 기일 (제사) 🕯️',
+      date: makeRelativeDate(-10), // 이전 날짜 (매년 반복)
+      lunar: true,
+      repeat: '매년',
+      memo: '본가 저녁 8시 제사상 차림'
+    }
+  ];
+}
+
+function getDefaultSampleLedgers() {
+  return [
+    {
+      id: 201,
+      eventId: 101,
+      eventName: '아버지 칠순 잔치 🎊',
+      type: '받은',
+      person: '큰삼촌 (김창호)',
+      method: '봉투',
+      amount: 500000,
+      memo: '칠순 축하 금일봉 봉투',
+      date: makeRelativeDate(-2)
+    },
+    {
+      id: 202,
+      eventId: 101,
+      eventName: '아버지 칠순 잔치 🎊',
+      type: '받은',
+      person: '고모 (김영숙)',
+      method: '봉투',
+      amount: 300000,
+      memo: '건강 기원 용돈 봉투',
+      date: makeRelativeDate(-1)
+    },
+    {
+      id: 203,
+      eventId: 103,
+      eventName: '사촌동생 지훈이 결혼식 💍',
+      type: '보낸',
+      person: '사촌 지훈',
+      method: '이체',
+      amount: 200000,
+      memo: '축의금 모바일 계좌이체',
+      date: makeRelativeDate(-5)
+    },
+    {
+      id: 204,
+      eventId: 104,
+      eventName: '조카 서윤이 첫돌 잔치 👶',
+      type: '보낸',
+      person: '동생 내외',
+      method: '선물',
+      amount: 150000,
+      memo: '돌 축하금 & 돌반지',
+      date: makeRelativeDate(-3)
+    },
+    {
+      id: 205,
+      eventId: 102,
+      eventName: '어머니 환갑 생신 🎂',
+      type: '보낸',
+      person: '어머니',
+      method: '봉투',
+      amount: 300000,
+      memo: '용돈박스 현금 준비',
+      date: makeRelativeDate(-1)
+    },
+    {
+      id: 206,
+      eventId: 103,
+      eventName: '사촌동생 지훈이 결혼식 💍',
+      type: '보낸',
+      person: '웨딩홀 화환',
+      method: '화환',
+      amount: 100000,
+      memo: '3단 축하 화환 배송',
+      date: makeRelativeDate(-4)
+    }
+  ];
+}
+
+// 스토리지 불러오기 (비어있거나 기존 데이터가 있어도 샘플이 잘 나오도록 연동)
+let events = JSON.parse(localStorage.getItem('gk_events') || 'null');
+let ledgers = JSON.parse(localStorage.getItem('gk_ledgers') || 'null');
+
+if (!events || events.length === 0) {
+  events = getDefaultSampleEvents();
+  localStorage.setItem('gk_events', JSON.stringify(events));
+}
+if (!ledgers || ledgers.length === 0) {
+  ledgers = getDefaultSampleLedgers();
+  localStorage.setItem('gk_ledgers', JSON.stringify(ledgers));
+}
+
+let isLunar = false;
+let calYear = today.getFullYear();
+let calMonth = today.getMonth();
+let editIdx = null;
+
+function save() {
+  localStorage.setItem('gk_events', JSON.stringify(events));
+  localStorage.setItem('gk_ledgers', JSON.stringify(ledgers));
+}
+
+// 샘플 데이터 재설정 기능
+function resetToSampleData() {
+  if (!confirm('예시 샘플 데이터로 다시 채우시겠습니까?\n현재 추가된 데이터가 샘플로 초기화됩니다.')) return;
+  events = getDefaultSampleEvents();
+  ledgers = getDefaultSampleLedgers();
+  save();
+  renderHome();
+  renderList();
+  renderLedger();
+  renderCalendar();
+  renderTopSummary();
+  showToast('🌈 다채로운 예시 샘플 데이터가 채워졌습니다!');
+}
+
+// ══════════════════════════════════════
+//  Web Audio API 기반 맑은 알림음 사운드 엔진 (무외부의존성)
+// ══════════════════════════════════════
+let audioCtx = null;
+
+function getAudioContext() {
+  if (!audioCtx) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioContextClass) {
+      audioCtx = new AudioContextClass();
+    }
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+function playChime(type = 'bell') {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+
+    if (type === 'bell') {
+      // 맑고 영롱한 크리스탈 차임벨 3중 화음 (도-미-솔-도)
+      const freqs = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      freqs.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.11);
+
+        gain.gain.setValueAtTime(0, now + idx * 0.11);
+        gain.gain.linearRampToValueAtTime(0.28, now + idx * 0.11 + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.11 + 0.85);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now + idx * 0.11);
+        osc.stop(now + idx * 0.11 + 0.9);
+      });
+      showToast('🔔 맑은 알림음이 울렸습니다!');
+    } else if (type === 'cheer') {
+      // 경쾌한 팡파레 축하음
+      const notes = [440, 554.37, 659.25, 880];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + i * 0.09);
+        gain.gain.setValueAtTime(0.22, now + i * 0.09);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.6);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + i * 0.09);
+        osc.stop(now + i * 0.09 + 0.65);
+      });
+    }
+  } catch (err) {
+    console.warn('Audio playback not allowed yet:', err);
+  }
+}
+
+// ══════════════════════════════════════
+//  카카오톡 맞춤 알림 메시지 생성기
+// ══════════════════════════════════════
+function generateKakaoMessage(ev) {
+  const dTxt = dDayText(ev);
+  const dateStr = getDisplayDate(ev);
+  const cat = ev.cat;
+
+  if (cat === '생일') {
+    return `🎂 [생일 축하 메시지]
+
+사랑하는 ${ev.name}님의 생신/생일을 진심으로 축하드립니다! 🎉
+
+늘 건강과 웃음이 가득하시고, 바라는 모든 소망이 이루어지는 행복한 한 해 되시기를 온 가족이 함께 기원합니다.
+
+오늘 하루 세상에서 가장 따뜻하고 특별한 시간 보내세요! ❤️
+
+📅 날짜: ${dateStr} (${dTxt})
+${ev.memo ? '💬 메모: ' + ev.memo : ''}
+- 창식의 경조노트 가족 알림`;
+  }
+
+  if (cat === '회갑/칠순') {
+    return `🎊 [회갑·칠순·팔순 축하 인사]
+
+${ev.name}님의 뜻깊은 고희(칠순)/환갑을 진심으로 축하드립니다! 💐
+
+그동안 가족들을 위해 아낌없이 베풀어주신 깊은 사랑과 헌신에 마음 깊이 감사드립니다.
+언제나 봄날처럼 건강하시고, 평안과 만수무강하시기를 두 손 모아 기원합니다. 존경하고 사랑합니다! 🙇‍♂️
+
+📅 일시: ${dateStr} (${dTxt})
+${ev.memo ? '📍 장소/안내: ' + ev.memo : ''}
+- 창식의 경조노트 가족 일동 올림`;
+  }
+
+  if (cat === '결혼') {
+    return `💍 [결혼 축하 메시지]
+
+${ev.name} 두 분의 눈부신 새 출발과 아름다운 백년가약을 진심으로 축하드립니다! 👰🤵
+
+서로를 가장 따뜻하게 품어주고 배려하며, 평생 사랑과 웃음이 넘치는 복된 가정을 이루시기를 온 마음으로 축복합니다.
+
+📅 예식 일시: ${dateStr} (${dTxt})
+${ev.memo ? '📍 예식장 안내: ' + ev.memo : ''}
+- 마음을 담아 축하를 전하며`;
+  }
+
+  if (cat === '기일/제사') {
+    return `🕯️ [기일·제사 안내]
+
+${ev.name} 기일 안내드립니다.
+
+오는 ${dateStr} (${dTxt})는 고인을 기리는 소중한 제사일입니다.
+경건한 마음으로 고인의 따뜻했던 사랑과 은덕을 추모하는 뜻깊은 시간을 함께 나누었으면 합니다.
+
+${ev.memo ? '📍 모임/준비: ' + ev.memo : ''}
+- 창식의 경조노트 안내`;
+  }
+
+  // 기타 (돌잔치, 개업식 등)
+  return `✨ [가족 경조사 안내]
+
+소중한 [${ev.name}] 행사를 안내해 드립니다.
+
+📅 날짜: ${dateStr} (${dTxt})
+${ev.memo ? '📝 내용: ' + ev.memo : '뜻깊은 자리에 따뜻한 축하와 관심 부탁드립니다.'}
+
+기쁜 날 함께 축하와 정을 나누었으면 좋겠습니다. 감사합니다!
+- 창식의 경조노트 알림`;
+}
+
+let currentKakaoEvent = null;
+
+function openKakaoModal(eventId) {
+  const ev = events.find(e => e.id == eventId);
+  if (!ev) return;
+  currentKakaoEvent = ev;
+
+  // 🔔 띵동 알림음 울리기!
+  playChime('bell');
+
+  const msg = generateKakaoMessage(ev);
+  document.getElementById('kakaoMessagePreview').textContent = msg;
+  document.getElementById('kakaoMessageEdit').value = msg;
+  document.getElementById('kakaoModal').classList.add('open');
+}
+
+function syncKakaoPreview() {
+  const edited = document.getElementById('kakaoMessageEdit').value;
+  document.getElementById('kakaoMessagePreview').textContent = edited;
+}
+
+function copyKakaoMessage() {
+  const text = document.getElementById('kakaoMessageEdit').value;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('📋 카톡 메시지가 복사되었습니다! 카톡 대화방에 붙여넣기(Ctrl+V)하세요.');
+    }).catch(() => {
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  showToast('📋 카톡 메시지가 복사되었습니다! 카톡 대화방에 붙여넣기하세요.');
+}
+
+function shareKakao() {
+  const text = document.getElementById('kakaoMessageEdit').value;
+  if (navigator.share) {
+    navigator.share({
+      title: '창식의 경조노트 알림',
+      text: text
+    }).catch(() => {
+      copyKakaoMessage();
+    });
+  } else {
+    copyKakaoMessage();
+    // 모바일 등에서 카카오톡 앱 열기 시도
+    window.location.href = 'kakaotalk://';
+  }
+}
+
+// ══════════════════════════════════════
+//  송금/전달 방식 정보 및 뱃지
+// ══════════════════════════════════════
+const METHOD_MAP = {
+  '봉투':     { icon: '✉️', label: '현금 봉투', cls: 'mb-봉투' },
+  '이체':     { icon: '📱', label: '계좌 이체', cls: 'mb-이체' },
+  '화환':     { icon: '💐', label: '화환/조화', cls: 'mb-화환' },
+  '모바일송금': { icon: '📲', label: '모바일 송금', cls: 'mb-모바일송금' },
+  '선물':     { icon: '🎁', label: '선물/물품', cls: 'mb-선물' }
+};
+
+function getMethodBadge(method) {
+  const m = METHOD_MAP[method] || { icon: '✉️', label: method || '봉투', cls: 'mb-봉투' };
+  return `<span class="method-badge ${m.cls}">${m.icon} ${m.label}</span>`;
+}
+
+function openMethodModal() {
+  const cur = document.getElementById('l_method').value || '봉투';
+  document.querySelectorAll('.method-opt-card').forEach(card => {
+    card.classList.remove('selected');
+  });
+  document.getElementById('methodModal').classList.add('open');
+}
+
+function selectMethod(val) {
+  const m = METHOD_MAP[val] || METHOD_MAP['봉투'];
+  document.getElementById('l_method').value = val;
+  document.getElementById('selectedMethodDisplay').innerHTML = `
+    <span class="method-badge ${m.cls}">${m.icon} ${m.label}</span>
+  `;
+  closeModal('methodModal');
+  showToast(`전달 방식: [${m.label}] 선택됨`);
+}
+
+// ══════════════════════════════════════
+//  최상단 누적 요약 카드 렌더링 (올해 낸 부조금 / 받은 축의금)
+// ══════════════════════════════════════
+function renderTopSummary() {
+  const curYear = today.getFullYear();
+  const yearBadge = document.getElementById('topYearBadge');
+  if (yearBadge) yearBadge.textContent = curYear;
+
+  let thisYearExpense = 0; // 올해 낸 총 부조금
+  let thisYearExpCount = 0;
+  let totalIncome = 0;     // 총 받은 축의금
+  let totalIncCount = 0;
+  let thisYearIncome = 0;
+
+  ledgers.forEach(l => {
+    const lYear = l.date ? parseInt(l.date.split('-')[0], 10) : curYear;
+    if (l.type === '받은') {
+      totalIncome += l.amount;
+      totalIncCount++;
+      if (lYear === curYear) thisYearIncome += l.amount;
+    } else {
+      if (lYear === curYear) {
+        thisYearExpense += l.amount;
+        thisYearExpCount++;
+      }
+    }
+  });
+
+  const netBalance = totalIncome - thisYearExpense;
+
+  const container = document.getElementById('topSummaryGrid');
+  if (!container) return;
+
+  container.innerHTML = `
+    <!-- 1. 올해 낸 총 부조금 -->
+    <div class="top-sum-card card-expense">
+      <div class="top-sum-left">
+        <div class="top-sum-label">📤 올해 낸 총 부조금</div>
+        <div class="top-sum-amount">-${formatAmount(thisYearExpense)}</div>
+        <div class="top-sum-sub">💸 올해 보낸 부조금·축의금 ${thisYearExpCount}건 누적</div>
+      </div>
+      <div class="top-sum-icon-badge">📤</div>
+    </div>
+
+    <!-- 2. 총 받은 축의금 -->
+    <div class="top-sum-card card-income">
+      <div class="top-sum-left">
+        <div class="top-sum-label">📥 총 받은 축의금</div>
+        <div class="top-sum-amount">+${formatAmount(totalIncome)}</div>
+        <div class="top-sum-sub">💰 행사별 받은 축하금 ${totalIncCount}건 누적 (올해 +${formatAmount(thisYearIncome)})</div>
+      </div>
+      <div class="top-sum-icon-badge">📥</div>
+    </div>
+
+    <!-- 3. 우리 집 순수지 -->
+    <div class="top-sum-card card-balance">
+      <div class="top-sum-left">
+        <div class="top-sum-label">💼 우리 집 순수지</div>
+        <div class="top-sum-amount" style="color:${netBalance >= 0 ? '#7c3aed' : '#dc2626'};">
+          ${netBalance >= 0 ? '+' : ''}${formatAmount(netBalance)}
+        </div>
+        <div class="top-sum-sub">${netBalance >= 0 ? '✨ 받은 금액이 더 많은 흑자 상태' : '⚠️ 보낸 금액이 더 많은 상태'}</div>
+      </div>
+      <div class="top-sum-icon-badge">⚖️</div>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════
+//  날짜 & D-Day 유틸
+// ══════════════════════════════════════
+function getNextDate(ev) {
+  if (!ev.date) return null;
+  const parts = ev.date.split('-');
+  if (parts.length < 3) return null;
+  const m = parseInt(parts[1], 10);
+  const d = parseInt(parts[2], 10);
+
+  if (ev.repeat === '1회') {
+    return new Date(parts[0], m - 1, d);
+  }
+
+  // 매년 반복의 경우 올해 혹은 내년 일자 계산
+  const yr = today.getFullYear();
+  let candidate = new Date(yr, m - 1, d);
+  if (candidate < today) {
+    candidate = new Date(yr + 1, m - 1, d);
+  }
+  return candidate;
+}
+
+function dDayNum(ev) {
+  const nd = getNextDate(ev);
+  if (!nd) return 9999;
+  return Math.round((nd - today) / 86400000);
+}
+
+function dDayText(ev) {
+  const diff = dDayNum(ev);
+  if (diff === 0) return 'D-Day';
+  if (diff > 0) return `D-${diff}`;
+  if (ev.repeat === '1회') return `D+${Math.abs(diff)}`;
+  return '';
+}
+
+function getDisplayDate(ev) {
+  return ev.date + (ev.lunar ? ' (음력)' : '');
+}
+
+function formatAmount(n) {
+  return Number(n || 0).toLocaleString('ko-KR') + '원';
+}
+
+function todayStr() {
+  const yr = today.getFullYear();
+  const mo = String(today.getMonth() + 1).padStart(2, '0');
+  const da = String(today.getDate()).padStart(2, '0');
+  return `${yr}-${mo}-${da}`;
+}
+
+// ══════════════════════════════════════
+//  탭 전환
+// ══════════════════════════════════════
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+
+  if (id === 'home') renderHome();
+  if (id === 'list') renderList();
+  if (id === 'ledger') renderLedger();
+  if (id === 'calendar') renderCalendar();
+}
+
+// ══════════════════════════════════════
+//  음력 토글
+// ══════════════════════════════════════
+function toggleLunar() {
+  isLunar = !isLunar;
+  const btn = document.getElementById('lunarToggleBtn');
+  const badge = document.getElementById('lunarBadge');
+  if (isLunar) {
+    btn.textContent = '음력 선택됨';
+    btn.classList.add('active');
+    badge.style.display = 'inline';
+  } else {
+    btn.textContent = '양력';
+    btn.classList.remove('active');
+    badge.style.display = 'none';
+  }
+}
+
+// ══════════════════════════════════════
+//  테마 & 뱃지 매핑
+// ══════════════════════════════════════
+const CAT_INFO = {
+  '생일':     { icon: '🎂', theme: 'theme-birthday', color: '#f59e0b' },
+  '기일/제사': { icon: '🕯️', theme: 'theme-memorial', color: '#64748b' },
+  '결혼':     { icon: '💍', theme: 'theme-wedding',  color: '#ec4899' },
+  '회갑/칠순': { icon: '🎊', theme: 'theme-sixty',    color: '#10b981' },
+  '기타':     { icon: '📌', theme: 'theme-other',    color: '#8b5cf6' }
+};
+
+function getCatBadge(cat) {
+  const info = CAT_INFO[cat] || { icon: '📌', color: '#8b5cf6' };
+  const cleanCat = cat.replace('/', '').replace(' ', '');
+  return `<span class="cat-badge cat-${cleanCat}">${info.icon} ${cat}</span>`;
+}
+
+// ══════════════════════════════════════
+//  1. 홈 렌더 (D-Day & 이달의 행사)
+// ══════════════════════════════════════
+function renderHome() {
+  // 30일 이내 다가오는 일정
+  const upcoming = events
+    .map(ev => ({ ev, diff: dDayNum(ev) }))
+    .filter(x => x.diff >= 0 && x.diff <= 30)
+    .sort((a, b) => a.diff - b.diff);
+
+  const ddayGrid = document.getElementById('ddayGrid');
+  if (upcoming.length === 0) {
+    ddayGrid.innerHTML = '<div class="no-dday">🎉 30일 이내에 예정된 경조사가 없습니다. 편안한 나날 되세요!</div>';
+  } else {
+    ddayGrid.innerHTML = upcoming.map(({ ev, diff }) => {
+      const info = CAT_INFO[ev.cat] || { theme: 'theme-other', icon: '📌' };
+      const isToday = (diff === 0);
+      const badgeText = isToday ? 'D-Day!' : `D-${diff}`;
+      const cleanCat = ev.cat.replace('/', '').replace(' ', '');
+
+      return `
+        <div class="dday-card ${info.theme} ${isToday ? 'today' : ''}">
+          <div class="dday-top">
+            <div class="dday-badge">${badgeText}</div>
+            <span class="dday-cat-tag cat-tag-${cleanCat}">${info.icon} ${ev.cat}</span>
+          </div>
+          <div>
+            <div class="dday-name">${ev.name}</div>
+            <div class="dday-date">📅 ${getDisplayDate(ev)} <span style="font-size:0.8rem;color:#8b5cf6;">(${ev.repeat})</span></div>
+            ${ev.memo ? `<div class="dday-memo">💬 ${ev.memo}</div>` : ''}
+          </div>
+          <div class="dday-card-actions">
+            <button class="btn-kakao-sm" onclick="openKakaoModal(${ev.id})">💬 카톡 알림</button>
+            <button class="btn-chime-sm" onclick="playChime('bell')">🔔 띵동</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // 이번 달 전체 일정
+  const currentMonthNum = today.getMonth() + 1;
+  document.getElementById('thisMonthBadge').textContent = `${currentMonthNum}월 행사`;
+
+  const thisMonthEvents = events.filter(ev => {
+    if (!ev.date) return false;
+    const parts = ev.date.split('-');
+    return parseInt(parts[1], 10) === currentMonthNum;
+  }).map(ev => ({ ev, diff: dDayNum(ev) }))
+    .sort((a, b) => a.diff - b.diff);
+
+  const tmGrid = document.getElementById('thisMonthGrid');
+  if (thisMonthEvents.length === 0) {
+    tmGrid.innerHTML = '<div class="no-dday">이번 달에 등록된 행사가 없습니다.</div>';
+  } else {
+    tmGrid.innerHTML = thisMonthEvents.map(({ ev, diff }) => {
+      const info = CAT_INFO[ev.cat] || { theme: 'theme-other', icon: '📌' };
+      const dTxt = dDayText(ev);
+      const cleanCat = ev.cat.replace('/', '').replace(' ', '');
+
+      return `
+        <div class="dday-card ${info.theme}">
+          <div class="dday-top">
+            <span class="dday-cat-tag cat-tag-${cleanCat}">${info.icon} ${ev.cat}</span>
+            <span style="font-weight:900;font-size:1.2rem;color:${info.color};">${dTxt}</span>
+          </div>
+          <div>
+            <div class="dday-name" style="font-size:1.15rem;">${ev.name}</div>
+            <div class="dday-date">📅 ${getDisplayDate(ev)}</div>
+            ${ev.memo ? `<div class="dday-memo">💬 ${ev.memo}</div>` : ''}
+          </div>
+          <div class="dday-card-actions">
+            <button class="btn-kakao-sm" onclick="openKakaoModal(${ev.id})">💬 카톡 알림</button>
+            <button class="btn-chime-sm" onclick="playChime('bell')">🔔 띵동</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+// ══════════════════════════════════════
+//  2. 경조사 등록
+// ══════════════════════════════════════
+function addEvent() {
+  const cat = document.getElementById('f_cat').value;
+  const name = document.getElementById('f_name').value.trim();
+  const date = document.getElementById('f_date').value;
+  const repeat = document.getElementById('f_repeat').value;
+  const memo = document.getElementById('f_memo').value.trim();
+
+  if (!name) { showToast('⚠️ 이름 또는 행사명을 입력해주세요!'); return; }
+  if (!date) { showToast('⚠️ 행사 날짜를 선택해주세요!'); return; }
+
+  const newEv = {
+    id: Date.now(),
+    cat,
+    name,
+    date,
+    lunar: isLunar,
+    repeat,
+    memo
+  };
+
+  events.push(newEv);
+  save();
+  clearForm();
+  showToast('✨ 경조사가 성공적으로 등록되었습니다!');
+  updateLedgerEventList();
+}
+
+function clearForm() {
+  document.getElementById('f_name').value = '';
+  document.getElementById('f_date').value = '';
+  document.getElementById('f_memo').value = '';
+  document.getElementById('f_cat').value = '생일';
+  document.getElementById('f_repeat').value = '매년';
+  isLunar = false;
+  document.getElementById('lunarToggleBtn').textContent = '양력';
+  document.getElementById('lunarToggleBtn').classList.remove('active');
+  document.getElementById('lunarBadge').style.display = 'none';
+}
+
+// ══════════════════════════════════════
+//  3. 경조사 목록 렌더
+// ══════════════════════════════════════
+function renderList() {
+  const filterCat = document.getElementById('filterCat').value;
+  const keyword = document.getElementById('searchBox').value.trim().toLowerCase();
+
+  const filtered = events.filter(ev => {
+    if (filterCat && ev.cat !== filterCat) return false;
+    if (keyword && !ev.name.toLowerCase().includes(keyword)) return false;
+    return true;
+  }).sort((a, b) => dDayNum(a) - dDayNum(b));
+
+  const tbody = document.getElementById('listBody');
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted);font-weight:600;">검색된 경조사가 없습니다.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(ev => {
+    const idx = events.indexOf(ev);
+    const dd = dDayText(ev);
+    const isToday = (dd === 'D-Day');
+    const ddStyle = isToday 
+      ? 'color:#ef4444;font-weight:900;font-size:1.1rem;' 
+      : 'color:#7c3aed;font-weight:800;';
+
+    return `
+      <tr>
+        <td>${getCatBadge(ev.cat)}</td>
+        <td style="font-weight:800;font-size:1.05rem;color:#1e1b4b;">${ev.name}</td>
+        <td>
+          <span style="font-weight:600;">${ev.date}</span>
+          ${ev.lunar ? '<span class="lunar-label">음력</span>' : ''}
+        </td>
+        <td><span style="font-size:0.88rem;color:#4b5563;font-weight:600;">${ev.repeat}</span></td>
+        <td><span style="${ddStyle}">${dd}</span></td>
+        <td style="color:#4b5563;font-size:0.92rem;max-width:240px;">${ev.memo || '-'}</td>
+        <td>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button class="btn-kakao-sm" style="padding:5px 8px;font-size:0.8rem;" onclick="openKakaoModal(${ev.id})">💬 카톡</button>
+            <button class="btn btn-edit btn-sm" onclick="openEdit(${idx})">✏️ 수정</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteEvent(${idx})">🗑️</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function deleteEvent(idx) {
+  if (!confirm(`"${events[idx].name}" 행사를 삭제하시겠습니까?`)) return;
+  events.splice(idx, 1);
+  save();
+  renderList();
+  updateLedgerEventList();
+  showToast('🗑️ 경조사가 삭제되었습니다.');
+}
+
+// ══════════════════════════════════════
+//  수정 모달
+// ══════════════════════════════════════
+function openEdit(idx) {
+  editIdx = idx;
+  const ev = events[idx];
+  const f = document.getElementById('editForm');
+  f.innerHTML = `
+    <div class="form-group">
+      <label>분류</label>
+      <select id="e_cat" class="form-control">
+        ${['생일','회갑/칠순','결혼','기일/제사','기타'].map(c => 
+          `<option value="${c}" ${ev.cat===c?'selected':''}>${c}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>이름/행사명</label>
+      <input type="text" id="e_name" class="form-control" value="${ev.name}">
+    </div>
+    <div class="form-group">
+      <label>날짜</label>
+      <input type="date" id="e_date" class="form-control" value="${ev.date}">
+    </div>
+    <div class="form-group">
+      <label>양력/음력</label>
+      <select id="e_lunar" class="form-control">
+        <option value="0" ${!ev.lunar?'selected':''}>양력</option>
+        <option value="1" ${ev.lunar?'selected':''}>음력</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>반복</label>
+      <select id="e_repeat" class="form-control">
+        <option ${ev.repeat==='매년'?'selected':''}>매년</option>
+        <option ${ev.repeat==='1회'?'selected':''}>1회</option>
+      </select>
+    </div>
+    <div class="form-group full">
+      <label>메모</label>
+      <textarea id="e_memo" class="form-control" rows="2">${ev.memo || ''}</textarea>
+    </div>
+  `;
+  document.getElementById('editModal').classList.add('open');
+}
+
+function saveEdit() {
+  if (editIdx === null) return;
+  events[editIdx] = {
+    ...events[editIdx],
+    cat: document.getElementById('e_cat').value,
+    name: document.getElementById('e_name').value.trim(),
+    date: document.getElementById('e_date').value,
+    lunar: document.getElementById('e_lunar').value === '1',
+    repeat: document.getElementById('e_repeat').value,
+    memo: document.getElementById('e_memo').value.trim()
+  };
+  save();
+  closeModal('editModal');
+  renderList();
+  renderHome();
+  updateLedgerEventList();
+  showToast('✅ 정보가 수정되었습니다.');
+  editIdx = null;
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// ══════════════════════════════════════
+//  4. 부조금 장부
+// ══════════════════════════════════════
+function updateLedgerEventList() {
+  const sel = document.getElementById('l_event');
+  const flt = document.getElementById('ledgerFilter');
+  const prevSel = sel ? sel.value : '';
+  const prevFlt = flt ? flt.value : '';
+
+  const opts = events.map(ev => `<option value="${ev.id}">${ev.name} (${ev.date})</option>`).join('');
+  if (sel) sel.innerHTML = opts || '<option value="">등록된 행사 없음</option>';
+  if (flt) {
+    flt.innerHTML = '<option value="">전체 내역 보기</option>' + opts;
+    flt.value = prevFlt;
+  }
+}
+
+function addLedger() {
+  const eventId = document.getElementById('l_event').value;
+  const type = document.getElementById('l_type').value;
+  const person = document.getElementById('l_person').value.trim();
+  const amount = parseInt(document.getElementById('l_amount').value || 0, 10);
+  const method = document.getElementById('l_method').value || '봉투';
+  const memo = document.getElementById('l_memo').value.trim();
+
+  if (!eventId) { showToast('⚠️ 행사를 선택해주세요!'); return; }
+  if (!person) { showToast('⚠️ 대상자 이름을 입력해주세요!'); return; }
+  if (!amount || amount <= 0) { showToast('⚠️ 올바른 금액을 입력해주세요!'); return; }
+
+  const ev = events.find(e => e.id == eventId);
+  ledgers.push({
+    id: Date.now(),
+    eventId: Number(eventId),
+    eventName: ev ? ev.name : '기타 행사',
+    type,
+    person,
+    method,
+    amount,
+    memo,
+    date: todayStr()
+  });
+
+  save();
+  document.getElementById('l_person').value = '';
+  document.getElementById('l_amount').value = '';
+  document.getElementById('l_memo').value = '';
+  renderLedger();
+  renderTopSummary();
+  showToast('💰 부조금 장부에 성공적으로 기록되었습니다!');
+}
+
+function renderLedger() {
+  updateLedgerEventList();
+  renderTopSummary();
+  const filter = document.getElementById('ledgerFilter').value;
+  const list = filter ? ledgers.filter(l => l.eventId == filter) : ledgers;
+
+  // 총액 합계 계산
+  let totalIncome = 0;
+  let totalExpense = 0;
+  ledgers.forEach(l => {
+    if (l.type === '받은') totalIncome += l.amount;
+    else totalExpense += l.amount;
+  });
+  const balance = totalIncome - totalExpense;
+
+  // 요약 바 렌더링 (초록 = 받은돈, 노랑 = 보낸돈, 보라 = 순수지)
+  document.getElementById('summaryBar').innerHTML = `
+    <div class="summary-card income">
+      <div class="header-sub">📥 총 받은 금액 (수입)</div>
+      <div class="amount">+${formatAmount(totalIncome)}</div>
+    </div>
+    <div class="summary-card expense">
+      <div class="header-sub">📤 총 보낸 금액 (지출)</div>
+      <div class="amount">-${formatAmount(totalExpense)}</div>
+    </div>
+    <div class="summary-card balance">
+      <div class="header-sub">💼 현재 순수지 (차액)</div>
+      <div class="amount" style="color:${balance >= 0 ? 'var(--purple-dark)' : '#dc2626'}">
+        ${balance >= 0 ? '+' : ''}${formatAmount(balance)}
+      </div>
+    </div>
+  `;
+
+  const tbody = document.getElementById('ledgerBody');
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--muted);font-weight:600;">기록된 부조금 내역이 없습니다.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = [...list].reverse().map(l => {
+    const isIncome = (l.type === '받은');
+    return `
+      <tr>
+        <td style="font-weight:800;color:#1e1b4b;">${l.eventName}</td>
+        <td>
+          <span style="padding:5px 12px;border-radius:20px;font-size:0.85rem;font-weight:800;
+            background:${isIncome ? '#d1fae5' : '#fef3c7'};
+            color:${isIncome ? '#065f46' : '#b45309'};">
+            ${isIncome ? '📥 받은 돈' : '📤 보낸 돈'}
+          </span>
+        </td>
+        <td style="font-weight:700;font-size:1.02rem;">${l.person}</td>
+        <td>${getMethodBadge(l.method || '봉투')}</td>
+        <td style="font-weight:900;font-size:1.15rem;color:${isIncome ? '#059669' : '#d97706'};">
+          ${isIncome ? '+' : '-'}${formatAmount(l.amount)}
+        </td>
+        <td style="color:#4b5563;font-size:0.92rem;">${l.memo || '-'}</td>
+        <td style="color:#64748b;font-size:0.9rem;font-weight:600;">${l.date}</td>
+        <td>
+          <button class="btn btn-danger btn-sm" onclick="deleteLedger(${l.id})">🗑️</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function deleteLedger(id) {
+  if (!confirm('이 부조금 내역을 삭제하시겠습니까?')) return;
+  ledgers = ledgers.filter(l => l.id !== id);
+  save();
+  renderLedger();
+  renderTopSummary();
+  showToast('🗑️ 내역이 삭제되었습니다.');
+}
+
+// ══════════════════════════════════════
+//  5. 캘린더
+// ══════════════════════════════════════
+function calMove(dir) {
+  calMonth += dir;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderCalendar();
+}
+
+function calToday() {
+  calYear = today.getFullYear();
+  calMonth = today.getMonth();
+  renderCalendar();
+}
+
+function renderCalendar() {
+  document.getElementById('calTitle').textContent = `${calYear}년 ${calMonth + 1}월`;
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const daysInPrev = new Date(calYear, calMonth, 0).getDate();
+
+  // 이번 달 일자별 이벤트 맵핑
+  const eventMap = {};
+  events.forEach(ev => {
+    if (!ev.date) return;
+    const parts = ev.date.split('-');
+    const evY = parseInt(parts[0], 10);
+    const evM = parseInt(parts[1], 10) - 1;
+    const evD = parseInt(parts[2], 10);
+
+    if (ev.repeat === '매년' && evM === calMonth) {
+      if (!eventMap[evD]) eventMap[evD] = [];
+      eventMap[evD].push(ev);
+    } else if (ev.repeat === '1회' && evY === calYear && evM === calMonth) {
+      if (!eventMap[evD]) eventMap[evD] = [];
+      eventMap[evD].push(ev);
+    }
+  });
+
+  let html = '';
+  let dayNum = 1;
+  let nextMonthDay = 1;
+  const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+
+  for (let i = 0; i < totalCells; i++) {
+    if (i < firstDay) {
+      const d = daysInPrev - firstDay + i + 1;
+      html += `<div class="cal-day other-month"><div class="cal-day-num">${d}</div></div>`;
+    } else if (dayNum > daysInMonth) {
+      html += `<div class="cal-day other-month"><div class="cal-day-num">${nextMonthDay++}</div></div>`;
+    } else {
+      const isCurrentToday = (calYear === today.getFullYear() && calMonth === today.getMonth() && dayNum === today.getDate());
+      const evs = eventMap[dayNum] || [];
+
+      html += `
+        <div class="cal-day ${isCurrentToday ? 'today' : ''}">
+          <div class="cal-day-num">${dayNum}</div>
+          ${evs.slice(0, 3).map(ev => {
+            const cleanCat = ev.cat.replace('/', '').replace(' ', '');
+            const info = CAT_INFO[ev.cat] || { icon: '📌' };
+            return `
+              <div class="cal-event-pill cal-pill-${cleanCat}" title="${ev.name} (${ev.cat})">
+                <span>${info.icon}</span>
+                <span>${ev.name}</span>
+              </div>
+            `;
+          }).join('')}
+          ${evs.length > 3 ? `<div style="font-size:0.75rem;color:#7c3aed;font-weight:800;">+${evs.length - 3}건 더보기</div>` : ''}
+        </div>
+      `;
+      dayNum++;
+    }
+  }
+
+  document.getElementById('calGrid').innerHTML = html;
+}
+
+// ══════════════════════════════════════
+//  데이터 백업 / 복원 / CSV 다운로드
+// ══════════════════════════════════════
+function exportCSV() {
+  let csv = '\uFEFF'; // Excel 한글 깨짐 방지 BOM
+
+  csv += '=== [창식의 경조노트 - 경조사 목록] ===\n';
+  csv += '분류,행사명,날짜,양력음력,반복구분,D-Day,메모\n';
+  events.forEach(ev => {
+    const dd = dDayText(ev);
+    csv += [
+      ev.cat,
+      ev.name,
+      ev.date,
+      ev.lunar ? '음력' : '양력',
+      ev.repeat,
+      dd,
+      ev.memo || ''
+    ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(',') + '\n';
+  });
+
+  csv += '\n=== [창식의 경조노트 - 부조금·축의금 출납 장부] ===\n';
+  csv += '행사명,구분,대상자,전달방식,금액,비고,기록일자\n';
+  ledgers.forEach(l => {
+    csv += [
+      l.eventName,
+      l.type === '받은' ? '받은금액' : '보낸금액',
+      l.person,
+      l.method || '봉투',
+      l.amount,
+      l.memo || '',
+      l.date
+    ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(',') + '\n';
+  });
+
+  const totalInc = ledgers.filter(l => l.type === '받은').reduce((s, l) => s + l.amount, 0);
+  const totalExp = ledgers.filter(l => l.type !== '받은').reduce((s, l) => s + l.amount, 0);
+  csv += `\n총 받은 금액,${totalInc}원\n총 보낸 금액,${totalExp}원\n순수지,${totalInc - totalExp}원\n`;
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `창식의경조노트_${todayStr()}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('📥 엑셀(CSV) 파일이 다운로드되었습니다!');
+}
+
+function backupJSON() {
+  const data = JSON.stringify({ events, ledgers, exportedAt: new Date().toISOString() }, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `창식의경조노트_백업_${todayStr()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('💾 백업 파일(JSON)이 저장되었습니다!');
+}
+
+function restoreJSON(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!Array.isArray(data.events) || !Array.isArray(data.ledgers)) throw new Error();
+      if (!confirm(`백업 파일로부터 복원하시겠습니까?\n기존 데이터가 덮어씌워집니다.\n(경조사 ${data.events.length}건 / 장부 ${data.ledgers.length}건)`)) return;
+      events = data.events;
+      ledgers = data.ledgers;
+      save();
+      renderHome();
+      renderList();
+      renderLedger();
+      renderCalendar();
+      renderTopSummary();
+      showToast('✅ 백업 데이터가 정상 복원되었습니다!');
+    } catch {
+      showToast('❌ 올바르지 않은 백업 파일 형식입니다.');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ══════════════════════════════════════
+//  토스트 & 모달 이벤트
+// ══════════════════════════════════════
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) closeModal(el.id); });
+});
+
+// ══════════════════════════════════════
+//  앱 시작
+// ══════════════════════════════════════
+(function init() {
+  renderTopSummary();
+  renderHome();
+  updateLedgerEventList();
+})();
+</script>
+</body>
+</html>
